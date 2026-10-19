@@ -16,3 +16,14 @@ An API-first portfolio analytics and backtesting platform.
 
 ## Status
 Early development. See the roadmap in `docs/roadmap.md`.
+
+equires Docker and [uv](https://docs.astral.sh/uv/).
+
+```bash
+cp .env.example .env
+make up      # start Postgres and apply migrations
+make run     # API at http://127.0.0.1:8000/docs
+make test    # run the test suite
+make ci      # run everything CI runs
+```
+
