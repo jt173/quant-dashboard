@@ -17,7 +17,7 @@ An API-first portfolio analytics and backtesting platform.
 ## Status
 Early development. See the roadmap in `docs/roadmap.md`.
 
-equires Docker and [uv](https://docs.astral.sh/uv/).
+Requires Docker and [uv](https://docs.astral.sh/uv/).
 
 ```bash
 cp .env.example .env

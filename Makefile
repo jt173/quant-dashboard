@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help up down stop migrate revision check ci test run api reset-db
+.PHONY: help up down stop migrate revision check ci test run api reset-db reset-test-db
 
 help:		## Show available commans
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
@@ -46,3 +46,6 @@ reset-db:   ## Wipe the database volume and re-migrate (destructive)
 	@echo "Waiting for Postgres..."
 	@until docker compose exec -T db pg_isready -U quant -d quant >/dev/null 2>&1; do sleep 1; done
 	uv run alembic upgrade head
+
+reset-test-db:	## Drop the test database (recreated and migrated on the next test run)
+	docker compose exec -T db psql -U quant -d postgres -c "DROP DATABASE IF EXISTS quant_test WITH (FORCE)"

@@ -1,7 +1,7 @@
 from logging.config import fileConfig
 
 from alembic import context
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import Connection, engine_from_config, pool
 
 from quant_dashboard import models  # noqa: F401 (registers tables on Base.metadata)
 from quant_dashboard.config import settings
@@ -54,13 +54,24 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
+def _run_migrations(connection: Connection) -> None:
+    context.configure(connection=connection, target_metadata=target_metadata)
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
-
+    Callers (e.g. the test suite) can hand in an open connection via
+    ``config.attributes["connection"]``; otherwise we create an engine from settings.
     """
+    connection = config.attributes.get("connection")
+    if connection is not None:
+        _run_migrations(connection)
+        return
+
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -68,10 +79,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
-
-        with context.begin_transaction():
-            context.run_migrations()
+        _run_migrations(connection)
 
 
 if context.is_offline_mode():
