@@ -32,10 +32,10 @@ ci:         ## Run exactly what CI runs (no auto-fix)
 	uv run ruff check .
 	uv run ruff format --check .
 	uv run mypy src tests
-	TEST_DATABASE_URL=postgresql+psycopg://<user>:<password>@localhost:5432/quant_dashboard_test uv run pytest
+	TEST_DATABASE_URL=postgresql+psycopg://quant:quant@localhost:5432/quant_dashboard_test uv run pytest
 
 test:       ## Run tests
-	TEST_DATABASE_URL=postgresql+psycopg://<user>:<password>@localhost:5432/quant_dashboard_test uv run pytest
+	TEST_DATABASE_URL=postgresql+psycopg://quant:quant@localhost:5432/quant_dashboard_test uv run pytest
 
 run:        ## Run the API locally with auto-reload
 	uv run uvicorn quant_dashboard.main:app --reload

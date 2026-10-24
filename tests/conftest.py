@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -9,8 +11,9 @@ from sqlalchemy import Engine, create_engine, text
 from sqlalchemy.engine import URL, make_url
 from sqlalchemy.orm import Session
 
+import quant_dashboard.models  # noqa: F401 (registers tables on Base.metadata)
 from quant_dashboard.config import settings
-from quant_dashboard.db import get_db
+from quant_dashboard.db import Base, get_db
 from quant_dashboard.main import app
 
 ALEMBIC_INI = Path(__file__).resolve().parent.parent / "alembic.ini"
@@ -74,3 +77,12 @@ def client(db: Session) -> Iterator[TestClient]:
         yield TestClient(app)
     finally:
         app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def session(engine: Engine) -> Iterator[Session]:
+    with Session(engine) as session:
+        yield session
+    tables = ", ".join(f'"{t.name}"' for t in Base.metadata.sorted_tables)
+    with engine.begin() as conn:
+        conn.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
