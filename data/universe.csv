@@ -1,0 +1,8 @@
+ticker,mic,currency,name
+AAPL,XNAS,USD,Apple Inc.
+MSFT,XNAS,USD,Microsoft Corp.
+NVDA,XNAS,USD,NVIDIA Corp.
+KO,XNYS,USD,Coca-Cola Co.
+JNJ,XNYS,USD,Johnson & Johnson
+SPY,ARCX,USD,SPDR S&P 500 ETF Trust
+AGG,ARCX,USD,iShares Core U.S. Aggregate Bond ETF

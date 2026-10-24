@@ -20,6 +20,9 @@ migrate:    ## Apply pending migrations
 revision:   ## Create a migration: make revision m="add prices table"
 	uv run alembic revision --autogenerate -m "$(m)"
 
+ingest:
+	uv run python -m quant_dashboard.ingestion $(ARGS)
+
 check:      ## Lint, format, and type check (auto-fixes)
 	uv run ruff check . --fix
 	uv run ruff format .
@@ -29,10 +32,10 @@ ci:         ## Run exactly what CI runs (no auto-fix)
 	uv run ruff check .
 	uv run ruff format --check .
 	uv run mypy src tests
-	uv run pytest
+	TEST_DATABASE_URL=postgresql+psycopg://<user>:<password>@localhost:5432/quant_dashboard_test uv run pytest
 
 test:       ## Run tests
-	uv run pytest
+	TEST_DATABASE_URL=postgresql+psycopg://<user>:<password>@localhost:5432/quant_dashboard_test uv run pytest
 
 run:        ## Run the API locally with auto-reload
 	uv run uvicorn quant_dashboard.main:app --reload

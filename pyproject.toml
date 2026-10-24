@@ -11,6 +11,7 @@ dependencies = [
     "pydantic-settings>=2.11.0",
     "sqlalchemy>=2.0.55",
     "uvicorn[standard]>=0.39.0",
+    "yfinance>=1.2.0",
 ]
 
 [project.scripts]
@@ -24,6 +25,7 @@ build-backend = "uv_build"
 dev = [
     "httpx>=0.28.1",
     "mypy>=1.19.1",
+    "pandas-stubs>=2.2.2.240807",
     "pre-commit>=4.3.0",
     "pytest>=8.4.2",
     "pytest-cov>=7.1.0",
@@ -46,3 +48,7 @@ exclude = ["migrations/"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-ra --cov=quant_dashboard --cov-report=term-missing"
+
+[[tool.mypy.overrides]]
+module = ["yfinance.*"]
+ignore_missing_imports = true
