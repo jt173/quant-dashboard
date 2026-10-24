@@ -1,0 +1,3 @@
+- Implementing plain dataclasses in the data access layer.
+- The analytics library will convert to pandas dataframe.
+- Yahoo close data is already split-adjusted, so the data access layer should adjust for dividends only
