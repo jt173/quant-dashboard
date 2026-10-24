@@ -74,14 +74,6 @@ class Severity(enum.StrEnum):
     ERROR = "error"
 
 
-class Note(Base):
-    __tablename__ = "notes"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    text: Mapped[str]
-    created_at: Mapped[datetime] = mapped_column(server_default=func.now())
-
-
 # --- Reference data ---
 class Security(Base):
     __tablename__ = "securities"
