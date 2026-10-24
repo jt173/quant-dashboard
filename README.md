@@ -27,3 +27,26 @@ make test    # run the test suite
 make ci      # run everything CI runs
 ```
 
+## Market data
+
+Daily prices and corporate actions are ingested from Yahoo Finance into Postgres.
+Yahoo's terms limit use to personal projects
+
+### Load data
+```bash
+make up         # start Postgres
+make migrate    # apply migrations
+make ingest     # load the tickers in data/universe.csv
+```
+
+Edit `data/universe.csv` to change the universe. Options go through `ARGS`:
+
+```bash
+make ingest ARGS="--start 2018-01-01":   # earliest date to backfill
+make ingest ARGS="--resume 3"            # retry unfinished items of run 3
+```
+
+Re-running is safe, writes are upserts, and each run re-fetches the last 
+7 days so late corrections are picked up.
+
+
